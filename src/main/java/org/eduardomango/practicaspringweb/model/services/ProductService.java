@@ -1,6 +1,7 @@
 package org.eduardomango.practicaspringweb.model.services;
 
 import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
+import org.eduardomango.practicaspringweb.model.exceptions.EntityDuplicatedException;
 import org.eduardomango.practicaspringweb.model.exceptions.ProductNotFoundException;
 import org.eduardomango.practicaspringweb.model.exceptions.UserNotFoundException;
 import org.eduardomango.practicaspringweb.model.repositories.IRepository;
@@ -34,7 +35,7 @@ public class ProductService {
                 .stream()
                 .filter(user -> user.getName().equalsIgnoreCase(name))
                 .findFirst()
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     public List<ProductEntity> findMoreExpensiveThan(Double price){
@@ -44,15 +45,37 @@ public class ProductService {
                 .toList();
     }
 
+
+    /*
     public void save(ProductEntity p) {
+        productRepository.save(
+                productRepository.findAll().stream()
+                .filter(x -> x.getId()==p.getId())
+                .findFirst().orElseThrow(ProductNotFoundException::new));
+    }
+    */
+    public void save(ProductEntity p) {
+        boolean exists =
+                productRepository.findAll().stream()
+                .anyMatch(x -> x.getId()==p.getId());
+        if(exists)
+            throw new EntityDuplicatedException("Ya se encuentra el producto");
         productRepository.save(p);
     }
 
     public void delete(ProductEntity p) {
-        productRepository.delete(p);
+        productRepository.delete(
+                productRepository.findAll().stream()
+                .filter(x -> x.getId()==p.getId())
+                .findFirst().orElseThrow(ProductNotFoundException::new)
+        );
     }
 
     public void update(ProductEntity p) {
-        productRepository.update(p);
+        productRepository.update(
+                productRepository.findAll().stream()
+                .filter(x->x.getId()==p.getId()).findFirst()
+                .map(x->p)
+                .orElseThrow(ProductNotFoundException::new));
     }
 }

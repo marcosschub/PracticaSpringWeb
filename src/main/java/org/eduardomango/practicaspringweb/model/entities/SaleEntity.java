@@ -1,6 +1,7 @@
 package org.eduardomango.practicaspringweb.model.entities;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,4 +22,15 @@ public class SaleEntity {
     private Long quantity;
     private UserEntity client;
     private LocalDate saleDate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof SaleEntity that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

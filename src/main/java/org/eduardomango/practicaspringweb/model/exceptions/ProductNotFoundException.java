@@ -7,6 +7,6 @@ public class ProductNotFoundException extends NoSuchElementException {
         super(message);
     }
 
-    public ProductNotFoundException() {
+    public ProductNotFoundException() { super("aaa");
     }
 }
