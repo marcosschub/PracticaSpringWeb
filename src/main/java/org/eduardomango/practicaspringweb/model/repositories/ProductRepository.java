@@ -1,6 +1,6 @@
 package org.eduardomango.practicaspringweb.model.repositories;
 
-import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
+import org.eduardomango.practicaspringweb.model.entities.Product.ProductEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -1,7 +1,8 @@
 package org.eduardomango.practicaspringweb.model.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
+import org.eduardomango.practicaspringweb.model.entities.Product.ProductEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.EntityDuplicatedException;
 import org.eduardomango.practicaspringweb.model.exceptions.ProductNotFoundException;
 import org.eduardomango.practicaspringweb.model.services.ProductService;
@@ -24,42 +25,24 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductEntity> get(@PathVariable long id){
-        try {
             return ResponseEntity.ok(service.findById(id));
-        }catch (ProductNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     @PostMapping
-    public ResponseEntity<ProductEntity> post(@RequestBody ProductEntity product){
-        try {
-            service.save(product);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }catch (EntityDuplicatedException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }/// Uso el conflict porque es el codigo http para elementos duplicados
+    public ResponseEntity<ProductEntity> post(@Valid @RequestBody ProductEntity product){
+        service.save(product);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-
-    //todo preguntar si se puede copiar en el json un parametro del path
     @PutMapping("/{id}")
-    public ResponseEntity<ProductEntity> put(@PathVariable long id, @RequestBody ProductEntity product){
-        try {
-            service.update(product);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } catch (ProductNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<ProductEntity> put(@PathVariable long id, @Valid @RequestBody ProductEntity product){
+        service.update(product);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable long id){
-        try {
-            service.delete(service.findById(id));
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (ProductNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        service.delete(service.findById(id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

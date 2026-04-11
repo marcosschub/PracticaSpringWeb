@@ -1,11 +1,9 @@
 package org.eduardomango.practicaspringweb.model.services;
 
-import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
+import org.eduardomango.practicaspringweb.model.entities.Product.ProductEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.EntityDuplicatedException;
 import org.eduardomango.practicaspringweb.model.exceptions.ProductNotFoundException;
-import org.eduardomango.practicaspringweb.model.exceptions.UserNotFoundException;
 import org.eduardomango.practicaspringweb.model.repositories.IRepository;
-import org.eduardomango.practicaspringweb.model.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,6 +52,8 @@ public class ProductService {
                 .findFirst().orElseThrow(ProductNotFoundException::new));
     }
     */
+
+
     public void save(ProductEntity p) {
         boolean exists =
                 productRepository.findAll().stream()

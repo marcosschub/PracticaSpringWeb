@@ -1,21 +1,13 @@
 package org.eduardomango.practicaspringweb.model.services;
 
-import jakarta.validation.constraints.Min;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
-import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
-import org.eduardomango.practicaspringweb.model.entities.SaleEntity;
-import org.eduardomango.practicaspringweb.model.entities.UserEntity;
+import org.eduardomango.practicaspringweb.model.entities.Sale.SalesDTO;
+import org.eduardomango.practicaspringweb.model.entities.Sale.SaleEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.*;
 import org.eduardomango.practicaspringweb.model.repositories.IRepository;
 import org.springframework.stereotype.Service;
 
-import javax.naming.directory.InvalidAttributesException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Random;
-import java.util.random.RandomGenerator;
 
 @Service
 public class SaleService {
@@ -39,15 +31,16 @@ public class SaleService {
 
 
 
-    public void save(long idSale, long idProduct, long idUser,@Min(0) long quantity) {
+    public void save(SalesDTO sale) {
         try {
             saleRepository.save(
                 SaleEntity.builder()
-                .id(idSale)
-                .products(productService.findById(idProduct))
-                .quantity(quantity)
-                .client(userService.findById(idUser))
-                .saleDate(LocalDate.now()).build());
+                .id(sale.getIdSale())
+                .products(productService.findById(sale.getIdProduct()))
+                .quantity(sale.getQuantity())
+                .client(userService.findById(sale.getIdClient()))
+                .saleDate(LocalDate.now())
+                .build());
         } catch (ProductNotFoundException | UserNotFoundException e) {
             throw new InvalidArgumentsException(e.getMessage());
         }

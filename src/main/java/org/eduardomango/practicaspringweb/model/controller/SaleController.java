@@ -1,8 +1,9 @@
 package org.eduardomango.practicaspringweb.model.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.eduardomango.practicaspringweb.model.DTO.SalesDTO;
-import org.eduardomango.practicaspringweb.model.entities.SaleEntity;
+import org.eduardomango.practicaspringweb.model.entities.Sale.SalesDTO;
+import org.eduardomango.practicaspringweb.model.entities.Sale.SaleEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.EntityDuplicatedException;
 import org.eduardomango.practicaspringweb.model.exceptions.ProductNotFoundException;
 import org.eduardomango.practicaspringweb.model.exceptions.SaleNotFoundException;
@@ -27,42 +28,24 @@ public class SaleController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SaleEntity> get(@PathVariable long id){
-        try {
-            return ResponseEntity.ok(service.findById(id));
-        }catch (SaleNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-}
+        return ResponseEntity.ok(service.findById(id));
+    }
 
     @PostMapping
-    public ResponseEntity<SaleEntity> post(@RequestBody SalesDTO salesDTO){
-        try {
-            service.save(salesDTO.getIdSale(), salesDTO.getIdProduct(),salesDTO.getIdClient(),salesDTO.getQuantity());
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }catch (EntityDuplicatedException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }catch (UserNotFoundException | ProductNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<SaleEntity> post(@Valid @RequestBody SalesDTO salesDTO){
+        service.save(salesDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SaleEntity> put( @PathVariable long id,@RequestBody SaleEntity sale){
-        try {
-            service.update(sale);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } catch (SaleNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<SaleEntity> put(@PathVariable long id, @Valid @RequestBody SaleEntity sale){
+        service.update(sale);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(SaleEntity sale){
-        try {
-            service.delete(sale);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (SaleNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<Void> delete(@PathVariable long id){
+        service.delete(service.findById(id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
