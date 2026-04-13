@@ -21,51 +21,59 @@ public class UserService {
     public List<UserEntity> findAll() {
         return userRepository.findAll();
     }
+
     public UserEntity findById(long id) {
         return userRepository.findAll()
                 .stream()
                 .filter(user -> user.getId() == id)
                 .findFirst()
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("El usuario buscado no se encuentra"));
     }
 
-    public UserEntity findByUsername(String username){
+    public UserEntity findByUsername(String username) {
         return userRepository.findAll()
                 .stream()
                 .filter(user -> user.getUsername().equalsIgnoreCase(username))
                 .findFirst()
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("El usuario buscado no se encuentra"));
     }
 
-    public UserEntity findByEmail(String email){
+    public UserEntity findByEmail(String email) {
         return userRepository.findAll()
                 .stream()
                 .filter(user -> user.getEmail().equalsIgnoreCase(email))
                 .findFirst()
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("El usuario buscado no se encuentra"));
     }
 
     public void save(UserEntity user) {
         boolean exists =
-                userRepository.findAll().stream()
-                        .anyMatch(x -> x.getId()==user.getId());
-        if(exists)
+                userRepository.findAll()
+                        .stream()
+                        .anyMatch(x -> x.getId() == user.getId());
+        if (exists)
             throw new EntityDuplicatedException("Ya se encuentra el usuario");
         userRepository.save(user);
     }
 
     public void delete(UserEntity user) {
         userRepository.delete(
-                userRepository.findAll().stream()
-                .filter(x-> x.getId()==user.getId())
-                .findFirst().orElseThrow(UserNotFoundException::new));
+                userRepository
+                        .findAll()
+                        .stream()
+                        .filter(x -> x.getId() == user.getId())
+                        .findFirst()
+                        .orElseThrow(() -> new UserNotFoundException("El usuario buscado no se encuentra")));
     }
 
     public void update(UserEntity user) {
         userRepository.update(
-                userRepository.findAll().stream()
-                .filter(x->x.getId()==user.getId()).findFirst()
-                .map(x->user)
-                .orElseThrow(UserNotFoundException::new));
+                userRepository
+                        .findAll()
+                        .stream()
+                        .filter(x -> x.getId() == user.getId())
+                        .findFirst()
+                        .map(x -> user)
+                        .orElseThrow(() -> new UserNotFoundException("El usuario buscado no se encuentra")));
     }
 }

@@ -19,29 +19,29 @@ public class UserController {
     private final UserService service;
 
     @GetMapping
-    public ResponseEntity<List<UserEntity>> getall(){
+    public ResponseEntity<List<UserEntity>> getall() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> get(@PathVariable long id){
+    public ResponseEntity<UserEntity> get(@PathVariable long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<UserEntity> post(@Valid @RequestBody UserEntity user){
+    public ResponseEntity<UserEntity> post(@Valid @RequestBody UserEntity user) {
         service.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> put(@PathVariable long id,@Valid @RequestBody UserEntity user){
+    public ResponseEntity<UserEntity> put(@PathVariable long id, @Valid @RequestBody UserEntity user) {
         service.update(user);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id){
+    public ResponseEntity<Void> delete(@PathVariable long id) {
         service.delete(service.findById(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -1,18 +1,16 @@
 package org.eduardomango.practicaspringweb.model.exceptions;
 
-import java.sql.Timestamp;
+import lombok.*;
+
 import java.time.LocalTime;
 
+@Getter
+@RequiredArgsConstructor
 public class ErrorDetails {
-    private LocalTime time;
-    private String message;
-    private String endpoint;
-
-    public ErrorDetails(String message, String endpoint) {
-        this.time = LocalTime.now();
-        this.message = message;
-        this.endpoint = endpoint;
-    }
+    //todo esta bien esto??
+    private final LocalTime time = LocalTime.now();
+    private final String message;
+    private final String endpoint;
 
 
 }

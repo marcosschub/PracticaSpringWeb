@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public class UserRepository implements IRepository<UserEntity> {
 
-    private List<UserEntity> users;
+    private final List<UserEntity> users;
 
     public UserRepository() {
         this.users = new ArrayList<>();

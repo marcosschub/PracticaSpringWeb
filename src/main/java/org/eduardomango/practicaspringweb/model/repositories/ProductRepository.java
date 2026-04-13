@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public class ProductRepository implements IRepository<ProductEntity> {
 
-    private List<ProductEntity> products;
+    private final List<ProductEntity> products;
 
     public ProductRepository() {
         this.products = new ArrayList<>();

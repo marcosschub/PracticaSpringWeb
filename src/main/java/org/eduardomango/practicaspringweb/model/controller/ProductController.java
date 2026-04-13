@@ -19,29 +19,29 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping
-    public ResponseEntity<List<ProductEntity>> list(){
+    public ResponseEntity<List<ProductEntity>> list() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductEntity> get(@PathVariable long id){
-            return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<ProductEntity> get(@PathVariable long id) {
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ProductEntity> post(@Valid @RequestBody ProductEntity product){
+    public ResponseEntity<ProductEntity> post(@Valid @RequestBody ProductEntity product) {
         service.save(product);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductEntity> put(@PathVariable long id, @Valid @RequestBody ProductEntity product){
+    public ResponseEntity<ProductEntity> put(@PathVariable long id, @Valid @RequestBody ProductEntity product) {
         service.update(product);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id){
+    public ResponseEntity<Void> delete(@PathVariable long id) {
         service.delete(service.findById(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
